@@ -4,6 +4,12 @@
 
 This project is built on Blazor, with a focus on quick page creation. It includes a sidebar that will auto update based on razor files located in the Pages/Docs directory.
 
+# Support
+
+This project supports both Blazor Server and Wasm deployments.
+
+> If using Blazor Wasm the JSON Metadata is not supported, since that requires access to the file system for loading the files.
+
 # Usage
 
 The the only required step is to create a razor file with a [Page] attribute and inherit from the PageMetadataBase class.
@@ -45,3 +51,8 @@ I have included a docker image, that can be used to package up the generated doc
 ~~~ bash
 docker build -t <docker-org>/docs:latest .
 ~~~
+
+# Future Work
+
+[] Look at adding support for JSON files in a Wasm deployment. 
+- Look at embedding the JSON into the DLL and loading from there.
