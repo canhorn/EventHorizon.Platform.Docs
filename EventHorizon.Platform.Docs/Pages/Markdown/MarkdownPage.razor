@@ -1,0 +1,470 @@
+﻿@page "/markdown"
+@attribute [Page]
+@attribute [PageMetadata(Title = "Markdown")]
+@inherits PageMetadataBase
+
+<Markdown Text="@(@"To help with the creation of my BabylonJS GUI's I put forward the effort to create them using a data driven approach. This allows for an editor to be created in the future, since the way I structure the controls for the GUI are a strict subset of controls. This article will not have an example project, maybe in the future, so it will focus mostly on how I use the built abstraction.
+
+## The Need
+
+The main need for having a Data Driven approach to generating my GUI is that I can store them very easily, in JSON currently. This will also allow for my Editor to have a nice and predictable way to create/edit GUI's.
+
+## GUI Details
+
+BabylonJS does have a pretty good GUI abstraction provided, but to better manage the life cycles of my platform's GUI I created wrapper around concepts. Some of the controls provided by my platform are Bar, Grid, Label, Input, Text, just to name a few. These encapsulations allow for me to create templates of how I want a control to look, and then use data to populate the state of the control.
+
+The system is made of Layouts, Templates, and Controls. The Layout is the order the collection of the controls will show on the screen. Templates can be used to setup default options for a control, making it easier to manage controls of the same type. Controls are instances of Templates, you can setup override options that will get precedence over the default options of the Template.
+
+By using a common abstraction for GUI Controls, it gives me a way to control the update and disposing of the control. And since the abstraction is share across all provided controls of the platform I can also get detailed information about the control and not have to know exactly how the control is structured. The structure of the control is no needed, since just knowing the type of the Control should give you a general idea of how the control should behave.
+
+The main workhorse of my GUI is the GuiFromData abstraction, on creation the model takes in a Layout, Control Data, and an optional Parent Control. The Layout contains a list of Control Data object, this dictates the template, control list, grid location, and the specific options this control should have.
+
+The Layout data also includes scripts that can be called during initialize, activate, dispose, update, and draw; allowing for fine control over the life-cycle of the GUI layout. Say for when an event is received, update some text control to display details. And since these scripts can come from the server, this give the developer the power to create dynamic controls.
+
+## Data Structure
+
+The data structure might look a little complicated, but that could be because the options are unique to the control being created. But with templates you can decrease the complexity by setting defaults that will would mostly never change.
+
+Below are a few examples, but taking out the options, you can see that its just a unique id, sort, templateId, gridLocation, and options. You will also notice that some properties can only be used in certain scenarios. Providing an animation option will cause the control to animation in a standard way. As of writing this article it is not possible to override the easing mode. The gridLocation is only used when the control is a child of a Grid control, it dictates the cross section column and row it should be placed in.
+
+### The overlay that is used to hold System Messages.
+~~~ json
+{
+    ""id"": ""GUI_CombatSystemLog.json"",
+    ""sort"": 0,
+    ""controlList"": [
+        {
+            ""id"": ""gui_combat_system_log-overlay"",
+            ""sort"": 0,
+            ""templateId"": ""platform-container"",
+            ""options"": {
+                ""isVisible"": false,
+                ""width"": ""66%"",
+                ""height"": ""50%"",
+                ""alpha"": 0.5,
+                ""horizontalAlignment"": 0,
+                ""verticalAlignment"": 0,
+                ""background"": ""black"",
+                ""cornerRadius"": 20,
+                ""left"": 20,
+                ""top"": 20,
+                ""thickness"": 0,
+                ""animation"": {
+                    ""isEnabled"": true,
+                    ""transition"": 0.05,
+                    ""transitionStart"": 0.01,
+                    ""transitionEnd"": 0.5,
+                    ""transitionTime"": 500
+                }
+            }
+        },
+        {
+            ""id"": ""gui_combat_system_log-container"",
+            ""sort"": 1,
+            ""templateId"": ""platform-container"",
+            ""options"": {
+                ""isVisible"": false,
+                ""width"": ""66%"",
+                ""height"": ""50%"",
+                ""horizontalAlignment"": 0,
+                ""verticalAlignment"": 0,
+                ""background"": ""transparent"",
+                ""left"": 20,
+                ""top"": 20,
+                ""thickness"": 0,
+                ""animation"": {
+                    ""isEnabled"": true,
+                    ""transition"": 0.05,
+                    ""transitionStart"": 0.01,
+                    ""transitionEnd"": 1,
+                    ""transitionTime"": 500
+                }
+            },
+            ""controlList"": [
+                {
+                    ""id"": ""gui_combat_system_log-panel"",
+                    ""sort"": 0,
+                    ""templateId"": ""platform-panel"",
+                    ""options"": {
+                        ""verticalAlignment"": 1,
+                        ""horizontalAlignment"": 0,
+                        ""top"": -15,
+                        ""left"": 15,
+                        ""enableScrolling"": true
+                    }
+                }
+            ]
+        }
+    ]
+}
+~~~
+
+### A Gui for displaying System Messages.
+~~~ json
+{
+    ""id"": ""GUI_CombatSystemLog-Message.json"",
+    ""sort"": 0,
+    ""controlList"": [
+        {
+            ""id"": ""gui_combat_system_message-panel"",
+            ""sort"": 0,
+            ""templateId"": ""platform-panel"",
+            ""options"": {
+                ""adaptHeightToChildren"": true,
+                ""top"": -45,
+                ""height"": ""50px"",
+                ""isVertical"": false,
+                ""verticalAlignment"": 1,
+                ""horizontalAlignment"": 0,
+                ""isPointerBlocker"": false
+            },
+            ""controlList"": [
+                {
+                    ""id"": ""gui_combat_system_message-sender"",
+                    ""sort"": 0,
+                    ""templateId"": ""platform-text"",
+                    ""options"": {
+                        ""alpha"": 1,
+                        ""background"": ""red"",
+                        ""resizeToFit"": true,
+                        ""color"": ""white"",
+                        ""width"": ""30px"",
+                        ""fontSize"": ""14px"",
+                        ""fontWeight"": ""bold"",
+                        ""height"": ""30px"",
+                        ""textKey"": ""combatSystem:system""
+                    }
+                },
+                {
+                    ""id"": ""gui_combat_system_message-message"",
+                    ""sort"": 1,
+                    ""templateId"": ""platform-text"",
+                    ""options"": {
+                        ""alpha"": 1,
+                        ""background"": ""red"",
+                        ""color"": ""white"",
+                        ""width"": ""600px"",
+                        ""fontSize"": ""14px"",
+                        ""textHorizontalAlignment"": 0,
+                        ""text"": ""message_text""
+                    }
+                }
+            ]
+        }
+    ]
+}
+~~~
+
+### The GUI layout for a Button.
+~~~ json
+{
+    ""id"": ""gui_dialog_action_button"",
+    ""sort"": 0,
+    ""controlList"": [
+        {
+            ""id"": ""gui_editor-action_button"",
+            ""sort"": 0,
+            ""templateId"": ""platform-button"",
+            ""options"": {
+                ""height"": ""26px"",
+                ""width"": ""100%"",
+                ""textKey"": ""dialog::button::hide"",
+                ""fontSize"": 16,
+                ""color"": ""white"",
+                ""background"": ""transparent"",
+                ""disabledColor"": ""gray"",
+                ""disabledHoverCursor"": ""mouse"",
+                ""hoverColor"": ""#151414"",
+                ""onClickScript"": ""Local_GuiLayout_Hide.js"",
+                ""textBlockOptions"": {
+                    ""paddingLeft"": ""5px"",
+                    ""resizeToFit"": true,
+                    ""textHorizontalAlignment"": 0
+                }
+            }
+        }
+    ]
+}
+~~~
+
+### An example of using the Grid Control and how a child would set its screen location using the gridLocation.
+~~~ json
+{
+    ""id"": ""GUI_Combat.json"",
+    ""sort"": 0,
+    ""initializeScript"": ""Scripts_Gui_CombatInitialize.js"",
+    ""controlList"": [
+        {
+            ""id"": ""gui_combat-grid"",
+            ""sort"": 0,
+            ""templateId"": ""platform-grid"",
+            ""options"": {
+                ""column"": 4,
+                ""row"": 4,
+                ""backgroundColor"": ""transparent"",
+                ""paddingBottom"": 50,
+                ""paddingTop"": 50,
+                ""paddingLeft"": 50,
+                ""paddingRight"": 50
+            },
+            ""controlList"": [
+                {
+                    ""id"": ""gui_combat-life_panel"",
+                    ""sort"": 0,
+                    ""templateId"": ""platform-panel"",
+                    // Using girdLocation you can dictate what column/row the control will take up in a Grid.
+                    ""gridLocation"": {
+                        ""column"": 3,
+                        ""row"": 0
+                    },
+                    ""options"": {},
+                    ""controlList"": [
+                    ]
+                }
+            ]
+        }
+    ]
+}
+~~~
+
+### Example of the GUI from Data class
+~~~ typescript
+export class GuiFromData extends LifeCycleEntity implements IGui {
+    public get guiId(): string {
+        return this._guiId;
+    }
+    public get layoutId(): string {
+        return this._layout.id;
+    }
+    private _initialized: boolean = false;
+    private _runActivate: boolean = false;
+    private _flattenedControlList: IGuiLayoutControlData[] = [];
+
+    constructor(
+        private _guiId: string,
+        private _layout: IGuiLayoutData,
+        private _controlDataList?: IGuiControlData[],
+        private _parentControlId?: string,
+        private readonly _commandService: ICommandService = Inject(
+            ICommandService
+        )
+    ) {
+        super();
+    }
+    public activate(): void {
+        if (this._initialized) {
+            this._flattenedControlList = this.getFlattenedControls();
+            this._flattenedControlList.forEach(control =>
+                this._commandService.send(
+                    createRegisterGuiControlCommand({
+                        guiId: this.guiId,
+                        control,
+                    })
+                )
+            );
+            this._commandService.send(
+                createSetupGuiLayoutCommand({
+                    guiId: this.guiId,
+                    layout: this._layout,
+                    parentControlId: this._parentControlId,
+                })
+            );
+            if (isObjectDefined(this._parentControlId)) {
+                addChildGuiToControl(this._parentControlId, this.guiId);
+            }
+            if (isObjectDefined(this._layout.activateScript)) {
+                runClientScript(
+                    `gui_from_data-${this.guiId}_${this.layoutId}-activate`,
+                    this._layout.activateScript,
+                    this
+                );
+            }
+        } else {
+            this._runActivate = true;
+        }
+    }
+    public initialize(): void {
+        if (isObjectDefined(this._layout.initializeScript)) {
+            runClientScript(
+                `gui_from_data-${this.guiId}_${this.layoutId}-initialize`,
+                this._layout.initializeScript,
+                this
+            );
+        }
+        this._initialized = true;
+        if (this._runActivate) {
+            this.activate();
+        }
+    }
+    public onDispose(): void {
+        if (isObjectDefined(this._layout.disposeScript)) {
+            runClientScript(
+                `gui_from_data-${this.guiId}_${this.layoutId}-initialize`,
+                this._layout.disposeScript,
+                this
+            );
+        }
+
+        this._flattenedControlList.forEach(control =>
+            this._commandService.send(
+                createDisposeOfGuiControlCommand({
+                    guiId: this.guiId,
+                    controlId: control.id,
+                })
+            )
+        );
+    }
+    public update(): void {
+        if (isObjectDefined(this._layout.updateScript)) {
+            runClientScript(
+                `gui_from_data-${this.guiId}_${this.layoutId}-initialize`,
+                this._layout.updateScript,
+                this
+            );
+        }
+    }
+    public draw(): void {
+        if (isObjectDefined(this._layout.drawScript)) {
+            runClientScript(
+                `gui_from_data-${this.guiId}_${this.layoutId}-initialize`,
+                this._layout.drawScript,
+                this
+            );
+        }
+    }
+    public hide(): void {
+        this._layout.controlList.forEach(control => {
+            this._commandService.send(
+                createUpdateGuiControlCommand({
+                    guiId: this.guiId,
+                    control: {
+                        controlId: control.id,
+                        isVisible: false,
+                    },
+                })
+            );
+        });
+    }
+    public show(): void {
+        this._layout.controlList.forEach(control => {
+            this._commandService.send(
+                createUpdateGuiControlCommand({
+                    guiId: this.guiId,
+                    control: {
+                        controlId: control.id,
+                        isVisible: true,
+                    },
+                })
+            );
+        });
+    }
+    public linkWith(linkWith: any): void {
+        this._layout.controlList.forEach(control => {
+            this._commandService.send(
+                createUpdateGuiControlCommand({
+                    guiId: this.guiId,
+                    control: {
+                        controlId: control.id,
+                        linkWith,
+                    },
+                })
+            );
+        });
+    }
+
+    private getFlattenedControls(): IGuiLayoutControlData[] {
+        return this.flattenControlListInto([], this._layout.controlList);
+    }
+    private flattenControlListInto(
+        array: IGuiLayoutControlData[],
+        controlList: IGuiLayoutControlData[] = []
+    ) {
+        return controlList.reduce(
+            (
+                current: IGuiLayoutControlData[],
+                prevValue: IGuiLayoutControlData
+            ) => {
+                this.flattenControlListInto(current, prevValue.controlList);
+                current.push({
+                    ...prevValue,
+                    options: objectMerge(prevValue.options || {}, {
+                        ...this.getGeneratedOptions(
+                            this.guiId,
+                            this._layout,
+                            prevValue
+                        ),
+                        ...this.getControlOptionsForControl(prevValue.id),
+                    }),
+                });
+                return current;
+            },
+            array
+        );
+    }
+    private getGeneratedOptions(
+        guiId: string,
+        layout: IGuiLayoutData,
+        control: IGuiLayoutControlData
+    ) {
+        const options: { [key: string]: any } = {};
+        const text = createOptionTextValueFromKey(control.options);
+        const onClick = createOptionOnClickScriptFromOnClick(
+            guiId,
+            layout,
+            control
+        );
+        if (isObjectDefined(text)) {
+            options.text = text;
+        }
+        if (isObjectDefined(onClick)) {
+            options.onClick = onClick;
+        }
+        return options;
+    }
+    private getControlOptionsForControl(controlId: string): any {
+        return (
+            (this._controlDataList || []).filter(
+                controlData => controlData.controlId === controlId
+            )[0] || { options: {} }
+        ).options;
+    }
+}
+
+const createOptionTextValueFromKey = (options?: any) => {
+    if (isObjectNotDefined(options) || isObjectNotDefined(options.textKey)) {
+        return undefined;
+    }
+    if (isObjectDefined(options.text)) {
+        return options.text;
+    }
+    return translation(options.textKey);
+};
+const createOptionOnClickScriptFromOnClick = (
+    guiId: string,
+    layout: IGuiLayoutData,
+    control: IGuiLayoutControlData
+) => {
+    const { options } = control;
+    if (
+        isObjectNotDefined(options) ||
+        isObjectNotDefined(options.onClickScript)
+    ) {
+        return undefined;
+    }
+    if (isObjectDefined(options.onClick)) {
+        return options.onClick;
+    }
+    return () => {
+        runClientScript(
+            `gui_from_data-${guiId}_${layout.id}-script_${options.onClickScript}`,
+            options.onClickScript,
+            {
+                layout,
+                control,
+            }
+        );
+    };
+};
+
+~~~
+")" />
