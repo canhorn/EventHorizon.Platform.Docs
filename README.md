@@ -29,7 +29,7 @@ Property | Description
 --- | ---
 Title | Used for display purposes outside of this page.
 
-## Metdata Example File
+## Example Razor File
 
 **CreateAMap.razor**
 ~~~ html
@@ -46,13 +46,13 @@ Title | Used for display purposes outside of this page.
 
 ~~~
 
-# More Details
+# Application Details
 
 This project created a Side Navigation based on the routes of the pages, so it will nest the routes under "folder" creating a compact tree structure. 
 
 The folders, pulled from the route, will require Resource Keys to be added to the SharedResource.resx to correctly localize.
 
-# Example
+# Deployment Scenarios
 
 You can clone this project and run the solution, checkout the GettingStarted.razor and CreateAMap.razor for examples of how the pages are structured. Any pages, correctly attributed, in the Pages directory should be supported.
 
