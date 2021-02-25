@@ -18,14 +18,19 @@
         [Inject]
         public PageMetadataRepository Repository { get; set; } = null!;
 
-        public PageMetadataModel PageMetadata { get; private set; }
+        public PageMetadataModel PageMetadata { get; private set; } = new PageMetadataModel();
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
 
+            var route = GetType().GetCustomAttribute<RouteAttribute>()?.Template ?? "";
+            if (string.IsNullOrEmpty(route))
+            {
+                return;
+            }
             PageMetadata = Repository.Get(
-                GetType().GetCustomAttribute<RouteAttribute>().Template
+                route
             );
         }
     }

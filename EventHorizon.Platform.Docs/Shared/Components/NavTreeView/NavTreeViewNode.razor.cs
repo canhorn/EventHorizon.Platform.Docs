@@ -17,7 +17,7 @@
         public EventCallback<NavTreeViewNodeData> OnNodeClicked { get; set; }
 
         [Inject]
-        public NavigationManager NavigationManager { get; set; }
+        public NavigationManager NavigationManager { get; set; } = null!;
         
         protected bool IsParentNode => Node.Children?.Count > 0;
 

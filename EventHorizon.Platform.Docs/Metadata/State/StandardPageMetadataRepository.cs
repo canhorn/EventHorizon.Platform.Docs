@@ -11,7 +11,6 @@
     using EventHorizon.Platform.Docs.Metadata.Attributes;
     using EventHorizon.Platform.Docs.Metadata.Model;
     using Microsoft.AspNetCore.Components;
-    using Microsoft.AspNetCore.Hosting;
 
     public class StandardPageMetadataRepository
         : PageMetadataRepository
@@ -20,11 +19,11 @@
         private readonly PageNavigation _nav;
 
         public StandardPageMetadataRepository(
-            IWebHostEnvironment env
+            PageMetadataSettings settings
         )
         {
             _map = GenerateListOfPageMetadata(
-                env
+                settings
             );
             _nav = BuildPageNavigation(
                 _map
@@ -48,33 +47,19 @@
             return _nav;
         }
 
-        private ConcurrentDictionary<string, PageMetadataModel> GenerateListOfPageMetadata(
-            IWebHostEnvironment env
+        private static ConcurrentDictionary<string, PageMetadataModel> GenerateListOfPageMetadata(
+            PageMetadataSettings settings
         )
         {
-            var jsonFilePathList = Directory.GetFiles(
-                Path.Combine(
-                    env.ContentRootPath,
-                    "Pages"
-                ),
-                "*.json",
-                new EnumerationOptions
-                {
-                    RecurseSubdirectories = true,
-                }
-            );
-
-
             var pageList = new Dictionary<string, PageMetadataModel>();
             var pageFileNameList = new List<string>();
-            // Get All Classes
-            var pageMetadataList = AppDomain.CurrentDomain.GetAssemblies()
+            // Get All Pages
+            var pageMetadataList = settings.PageAssemblyList
                 .SelectMany(x => x.DefinedTypes)
                 .Where(type => typeof(PageMetadata).IsAssignableFrom(type));
 
             foreach (var typeInfo in pageMetadataList)
             {
-
                 if (Attribute.IsDefined(
                     typeInfo,
                     typeof(PageAttribute),
@@ -92,7 +77,6 @@
                             $"Page Metadata needs a RouteAttribute to function: {typeInfo.Name}"
                         );
                     }
-                    var metadataFileName = $"{typeInfo.Name}.razor.json";
                     var model = new PageMetadataModel
                     {
                         Title = typeInfo.Name,
@@ -104,21 +88,9 @@
                     ))
                     {
                         var pageMetadataAttribute = typeInfo.GetCustomAttribute<PageMetadataAttribute>();
-                        model.Title = pageMetadataAttribute.Title;
+                        model.Title = pageMetadataAttribute?.Title ?? typeInfo.Name;
                     }
 
-                    // If has the Json Metadata File override the existing Model Properties
-                    if (jsonFilePathList.Any(
-                        a => a.EndsWith(metadataFileName)
-                    ))
-                    {
-                        var fileFullName = jsonFilePathList.First(
-                            a => a.EndsWith(metadataFileName)
-                        );
-                        model = JsonSerializer.Deserialize<PageMetadataModel>(
-                            File.ReadAllText(fileFullName)
-                        );
-                    }
                     model.Route = routeAttribute.Template;
 
                     pageList.Add(
@@ -133,7 +105,7 @@
             );
         }
 
-        private PageNavigation BuildPageNavigation(
+        private static PageNavigation BuildPageNavigation(
             IDictionary<string, PageMetadataModel> pageList
         )
         {
@@ -154,11 +126,16 @@
                     path
                 );
             }
+            root.ChildrenAsList = root.ChildrenAsList?.OrderBy(
+                a => a.Title
+            )?.OrderBy(
+                a => a.ChildrenAsList != null
+            )?.ToList() ?? new List<PageNavigationModel>();
 
             return root;
         }
 
-        private void AddNavigationModelToNode(
+        private static void AddNavigationModelToNode(
             IDictionary<string, PageMetadataModel> pageList,
             PageNavigationModel root,
             string path
@@ -185,9 +162,9 @@
                 ).IsFolder)
                 {
                     // Set newParent to already existing 
-                    newParent = parent.Children.First(
+                    newParent = (PageNavigationModel)parent.Children.First(
                         a => a.Id == newParentPath
-                    ) as PageNavigationModel;
+                    );
                 }
                 else if (parent.Children.Any(
                     a => a.Id == newParentPath
@@ -197,9 +174,9 @@
                 {
                     // Update Parent Node to Parent Folder
                     // And add Node to Folder
-                    newParent = parent.Children.First(
+                    newParent = (PageNavigationModel)parent.Children.First(
                         a => a.Id == newParentPath
-                    ) as PageNavigationModel;
+                    );
                     var newParentAsNode = new PageNavigationModel
                     {
                         Id = newParent.Id,
@@ -228,6 +205,11 @@
                 }
 
                 parent = newParent;
+                parent.ChildrenAsList = parent.ChildrenAsList?.OrderBy(
+                    a => a.Title
+                )?.OrderBy(
+                    a => a.ChildrenAsList != null
+                )?.ToList() ?? new List<PageNavigationModel>();
             }
 
             parent.ChildrenAsList.Add(
@@ -241,6 +223,11 @@
                     Route = path,
                 }
             );
+            parent.ChildrenAsList = parent.ChildrenAsList?.OrderBy(
+                a => a.Title
+            )?.OrderBy(
+                a => a.ChildrenAsList != null
+            )?.ToList() ?? new List<PageNavigationModel>();
         }
     }
 }

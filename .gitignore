@@ -6,5 +6,4 @@ appsettings.*.json
 .vs
 *.csproj.user
 Published
-
-Clients/Desktop/EventHorizon.Blazor.Chat.Desktop/appsettings.json
+output

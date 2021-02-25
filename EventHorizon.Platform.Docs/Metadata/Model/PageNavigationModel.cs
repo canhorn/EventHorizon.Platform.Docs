@@ -11,6 +11,6 @@
         public string Route { get; set; } = string.Empty;
         public bool IsFolder { get; set; }
         public IEnumerable<PageNavigation> Children => ChildrenAsList;
-        public List<PageNavigationModel> ChildrenAsList { get; set; }
+        public List<PageNavigationModel> ChildrenAsList { get; set; } = new List<PageNavigationModel>();
     }
 }

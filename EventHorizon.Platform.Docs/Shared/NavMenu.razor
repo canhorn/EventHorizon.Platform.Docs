@@ -24,12 +24,12 @@
     [Inject]
     public Localizer<SharedResource> Localizer { get; set; } = null!;
     [Inject]
-    public PageMetadataRepository Repository { get; set; }
+    public PageMetadataRepository Repository { get; set; } = null!;
 
     private NavTreeViewNodeData NavigationTreeView { get; set; } = null!;
     private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : string.Empty;
 
     protected override void OnInitialized()
     {
@@ -56,7 +56,7 @@
     }
 
     private NavTreeViewNodeData BuildEditorTreeViewNode(
-        NavTreeViewNodeData existingTreeView,
+        NavTreeViewNodeData? existingTreeView,
         PageNavigation model,
         IEnumerable<NavTreeViewNodeData> expandedList
     )
@@ -66,16 +66,16 @@
             Id = model.Id,
             Name = model.Title,
             Text = Localizer[model.Title],
-            Href = !model.IsFolder ? model.Route : null,
+            Href = !model.IsFolder ? model.Route : string.Empty,
             IsDisabled = model.IsFolder && (model.Children == null || !model.Children.Any()),
-            IconCssClass = null, //"--icon oi oi-" + (model.IsFolder ? "folder" : "file"),
+            IconCssClass = string.Empty, //"--icon oi oi-" + (model.IsFolder ? "folder" : "file"),
             Children = model.Children?.Select(
                 childNode => BuildEditorTreeViewNode(
                     existingTreeView,
                     childNode,
                     expandedList
                 )
-            ).OrderBy(a => a.Text).ToList(),
+            ).ToList() ?? new List<NavTreeViewNodeData>(),
             IsExpanded = GetExistingValueOrDefault(
                 existingTreeView?.Children ?? new List<NavTreeViewNodeData>(),
                 model.Id
