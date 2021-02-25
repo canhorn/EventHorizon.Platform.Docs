@@ -86,4 +86,9 @@ sh publish.sh
 ./publish.ps1
 ~~~
 
+~~~ bash
+# Use the dotnet serve tool to host a static version of the site
+dotnet serve -d ./output/wwwroot
+~~~
+
 Inspiration for the Pre-Rendering was from the blog of Andrew Lock. The post most of the Pre-Renderer was derived from is here https://andrewlock.net/enabling-prerendering-for-blazor-webassembly-apps/
