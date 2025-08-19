@@ -17,6 +17,9 @@ This project supports Blazor Server, Wasm, and Static Site Wasm deployments.
 
 ## Getting Started
 
+- Update `GlobalPageConfig.BaseUrl` with your site's base URL.
+  - If your deploying to GitHub update this to the GitHub Pages Base URL.
+  - If your using a custom website that is deployed at the root you can remove the reference to the base URL or set to an empty string.
 - Update instances of `[[EventHorizon Privacy Policy Email]]` in the project with the email address for your site's privacy policy.
 - Update instances of `[[EventHorizon Docs URL]]` in the project with the URL of your site.
 - Update instances of `[[EventHorizon Docs Site]]` in the project with the Name of your site.
