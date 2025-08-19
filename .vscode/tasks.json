@@ -1,0 +1,44 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "format",
+            "command": "pwsh",
+            "type": "process",
+            "args": [
+                "entry.ps1",
+                "format"
+            ],
+        },
+        {
+            "label": "build",
+            "command": "pwsh",
+            "type": "process",
+            "dependsOn": [
+                "format"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": [
+                "entry.ps1",
+                "build"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "pwsh",
+            "type": "process",
+            "dependsOn": [
+                "format"
+            ],
+            "args": [
+                "entry.ps1",
+                "watch"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

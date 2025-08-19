@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website", "Website\Website.csproj", "{715B8588-1CBD-4917-9260-B453006BA269}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EBA60231-F21E-4207-A721-00AAA4B64317}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Dockerfile = Dockerfile
+		publish.ps1 = publish.ps1
+		publish.sh = publish.sh
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Static.PreRenderer", "Static.PreRenderer\Static.PreRenderer.csproj", "{8D0C506E-5E9A-4F36-BC29-07F15A96E4F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{5E270C75-82E9-470C-A056-DAB1822C2C3C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{715B8588-1CBD-4917-9260-B453006BA269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{715B8588-1CBD-4917-9260-B453006BA269}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{715B8588-1CBD-4917-9260-B453006BA269}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{715B8588-1CBD-4917-9260-B453006BA269}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D0C506E-5E9A-4F36-BC29-07F15A96E4F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D0C506E-5E9A-4F36-BC29-07F15A96E4F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D0C506E-5E9A-4F36-BC29-07F15A96E4F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D0C506E-5E9A-4F36-BC29-07F15A96E4F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E270C75-82E9-470C-A056-DAB1822C2C3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E270C75-82E9-470C-A056-DAB1822C2C3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E270C75-82E9-470C-A056-DAB1822C2C3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E270C75-82E9-470C-A056-DAB1822C2C3C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9E23C52-94E2-4859-BDBE-725BF845CB61}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,31 @@
+@inherits PagePaginationBase
+
+<div class="page-pagination">
+    @if (PreviousPage is not null)
+    {
+        <a class="page-item" href="@PreviousPage.Route">
+            <MudPaper Outlined="true" Class="pa-6 previous-page">
+                <MudText Class="pa-0" Typo="Typo.body2">Previous</MudText>
+                <MudText Class="pa-0" Typo="Typo.body1">@PreviousPage.Title</MudText>
+            </MudPaper>
+        </a>
+    }
+    else
+    {
+        <div class="page-item"></div>
+    }
+
+    @if (NextPage is not null)
+    {
+        <a class="page-item" href="@NextPage.Route">
+            <MudPaper Outlined="true" Class="pa-6 next-page">
+                <MudText Class="pa-0" Typo="Typo.body2">Next</MudText>
+                <MudText Class="pa-0" Typo="Typo.body1">@NextPage.Title</MudText>
+            </MudPaper>
+        </a>
+    }
+    else
+    {
+        <div class="page-item"></div>
+    }
+</div>

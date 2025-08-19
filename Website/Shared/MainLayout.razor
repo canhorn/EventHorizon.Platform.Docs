@@ -1,0 +1,49 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider IsDarkMode="true" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar>
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
+            OnClick="@((e) => DrawerToggle())" />
+        <div class="ml-3 mud-typography mud-typography-h6">
+            <MudNavLink Href="/">
+                @Localizer["[[EventHorizon Docs Site]]"]
+            </MudNavLink>
+        </div>
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Always">
+        <NavMenu />
+    </MudDrawer>
+
+    <MudMainContent>
+        <MudContainer> @Body </MudContainer>
+
+        @* Uncomment <PagePagination /> to move through pages *@
+        @* <PagePagination /> *@
+
+        <MudContainer>
+            <footer style="text-align:center; padding: 3rem 0;">
+                <div>@Localizer["All Rights Reserved"]</div>
+                <div>
+                    <MudLink Href="/privacy-policy">@Localizer["Privacy Policy"]</MudLink> |
+                    <MudLink Href="/terms-of-service">@Localizer["Terms of Service"]</MudLink>
+                </div>
+            </footer>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    [Inject]
+    public required Localizer<SharedResource> Localizer { get; set; }
+
+    private bool _drawerOpen = true;
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}

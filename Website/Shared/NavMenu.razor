@@ -1,0 +1,8 @@
+﻿@using Website.Shared.Components.NavTreeView
+
+<MudNavMenu>
+    @foreach (var node in NavigationTreeView.Children)
+    {
+        <NavTreeView Root="node" OnNodeClicked="HandleNodeClicked" />
+    }
+</MudNavMenu>

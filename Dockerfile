@@ -5,7 +5,7 @@ WORKDIR /source
 COPY ./*.sln ./
 
 # Copy Main Source
-COPY EventHorizon.Platform.Docs/EventHorizon.Platform.Docs.csproj ./EventHorizon.Platform.Docs/EventHorizon.Platform.Docs.csproj
+COPY Website/Website.csproj ./Website/Website.csproj
 
 # Restore Packages
 RUN dotnet restore
@@ -21,4 +21,4 @@ RUN dotnet publish --output /app/ --configuration Release --no-restore --no-buil
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "EventHorizon.Platform.Docs.dll"]
+ENTRYPOINT ["dotnet", "Website.dll"]

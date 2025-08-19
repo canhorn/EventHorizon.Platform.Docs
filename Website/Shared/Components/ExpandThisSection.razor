@@ -1,0 +1,23 @@
+﻿
+<p>
+    @Localizer["This section could use some help expanding, check back later."]
+</p>
+
+@if (Metadata != null)
+{
+    <div>
+        <div>@Localizer["Title: {0}", Metadata.Title]</div>
+        <div>@Localizer["Route: {0}", Metadata.Route]</div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string Path { get; set; } = null!;
+    [Parameter]
+    public PageMetadataModel? Metadata { get; set; }
+
+    [Inject]
+    public Localizer<SharedResource> Localizer { get; set; } = null!;
+}

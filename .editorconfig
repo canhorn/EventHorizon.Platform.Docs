@@ -3,18 +3,63 @@ root = true
 
 # C# files
 [*.cs]
+dotnet_analyzer_diagnostic.category-Style.severity = warning
 
-# Enforce _ fields instances
-dotnet_naming_rule.instance_fields_should_be_camel_case.severity = suggestion
-dotnet_naming_rule.instance_fields_should_be_camel_case.symbols = instance_fields
-dotnet_naming_rule.instance_fields_should_be_camel_case.style = instance_field_style
- 
-dotnet_naming_symbols.instance_fields.applicable_kinds = field
- 
-dotnet_naming_style.instance_field_style.capitalization = camel_case
-dotnet_naming_style.instance_field_style.required_prefix = _
+dotnet_naming_rule.parameters_must_be_camel_cased.symbols                                             = parameter_symbols
+dotnet_naming_rule.parameters_must_be_camel_cased.style                                               = camel_case_style
+dotnet_naming_rule.parameters_must_be_camel_cased.severity                                            = warning
+
+dotnet_naming_rule.constants_must_be_pascal_cased.symbols                                             = constant_symbols
+dotnet_naming_rule.constants_must_be_pascal_cased.style                                               = pascal_case_style
+dotnet_naming_rule.constants_must_be_pascal_cased.severity                                            = warning
+
+dotnet_naming_rule.private_static_fields_must_be_camel_cased_and_prefixed_with_s_underscore.symbols   = private_static_field_symbols
+dotnet_naming_rule.private_static_fields_must_be_camel_cased_and_prefixed_with_s_underscore.style     = camel_case_and_prefix_with_s_underscore_style
+dotnet_naming_rule.private_static_fields_must_be_camel_cased_and_prefixed_with_s_underscore.severity  = warning
+
+dotnet_naming_rule.private_instance_fields_must_be_camel_cased_and_prefixed_with_underscore.symbols   = private_field_symbols
+dotnet_naming_rule.private_instance_fields_must_be_camel_cased_and_prefixed_with_underscore.style     = camel_case_and_prefix_with_underscore_style
+dotnet_naming_rule.private_instance_fields_must_be_camel_cased_and_prefixed_with_underscore.severity  = warning
+
+# Symbols
+dotnet_naming_symbols.externally_visible_symbols.applicable_kinds                                     = class,struct,interface,enum,property,method,field,event,delegate
+dotnet_naming_symbols.externally_visible_symbols.applicable_accessibilities                           = public,internal,friend,protected,protected_internal,protected_friend,private_protected
+
+dotnet_naming_symbols.interface_symbols.applicable_kinds                                              = interface
+dotnet_naming_symbols.interface_symbols.applicable_accessibilities                                    = *
+
+dotnet_naming_symbols.parameter_symbols.applicable_kinds                                              = parameter
+dotnet_naming_symbols.parameter_symbols.applicable_accessibilities                                    = *
+
+dotnet_naming_symbols.constant_symbols.applicable_kinds                                               = field
+dotnet_naming_symbols.constant_symbols.required_modifiers                                             = const
+dotnet_naming_symbols.constant_symbols.applicable_accessibilities                                     = *
+
+dotnet_naming_symbols.private_static_field_symbols.applicable_kinds                                   = field
+dotnet_naming_symbols.private_static_field_symbols.required_modifiers                                 = static,shared
+dotnet_naming_symbols.private_static_field_symbols.applicable_accessibilities                         = private
+
+dotnet_naming_symbols.private_field_symbols.applicable_kinds                                          = field
+dotnet_naming_symbols.private_field_symbols.applicable_accessibilities                                = private
+
+# Styles
+dotnet_naming_style.camel_case_style.capitalization                                                   = camel_case
+
+dotnet_naming_style.pascal_case_style.capitalization                                                  = pascal_case
+
+dotnet_naming_style.camel_case_and_prefix_with_s_underscore_style.required_prefix                     = 
+dotnet_naming_style.camel_case_and_prefix_with_s_underscore_style.capitalization                      = pascal_case
+
+dotnet_naming_style.camel_case_and_prefix_with_underscore_style.required_prefix                       = _
+dotnet_naming_style.camel_case_and_prefix_with_underscore_style.capitalization                        = camel_case
+
+dotnet_naming_style.pascal_case_and_prefix_with_I_style.required_prefix                               = I
+dotnet_naming_style.pascal_case_and_prefix_with_I_style.capitalization                                = pascal_case
 
 #### Core EditorConfig Options ####
+
+charset = utf-8
+trim_trailing_whitespace = true
 
 # Indentation and spacing
 indent_size = 4
@@ -23,12 +68,12 @@ tab_width = 4
 
 # New line preferences
 end_of_line = crlf
-insert_final_newline = false
+insert_final_newline = true
 
 #### .NET Coding Conventions ####
 
 # Organize usings
-dotnet_separate_import_directive_groups = false
+dotnet_separate_import_directive_groups = true
 dotnet_sort_system_directives_first = true
 file_header_template = unset
 
@@ -49,7 +94,7 @@ dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
 dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 
 # Modifier preferences
-dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
+dotnet_style_require_accessibility_modifiers = always
 
 # Expression-level preferences
 dotnet_style_coalesce_expression = true:suggestion
@@ -104,7 +149,7 @@ csharp_prefer_static_local_function = true:suggestion
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:silent
 
 # Code-block preferences
-csharp_prefer_braces = true:silent
+csharp_prefer_braces = true:error
 csharp_prefer_simple_using_statement = true:suggestion
 
 # Expression-level preferences
@@ -205,10 +250,46 @@ dotnet_naming_style.pascal_case.required_suffix =
 dotnet_naming_style.pascal_case.word_separator = 
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 
-dotnet_naming_style.begins_with_i.required_prefix = I
+dotnet_naming_style.begins_with_i.required_prefix =
 dotnet_naming_style.begins_with_i.required_suffix = 
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
-# IDE1006: Naming Styles
-dotnet_diagnostic.IDE1006.severity = none
+# CA1816: Dispose methods should call SuppressFinalize
+dotnet_diagnostic.CA1816.severity = silent
+
+# CA2211: Non-constant fields should not be visible
+dotnet_diagnostic.CA2211.severity = silent
+
+# IDE0160: Convert to file-scoped namespace
+csharp_style_namespace_declarations = file_scoped:warning
+
+# IDE0008: Use explicit type instead of 'var'
+dotnet_diagnostic.IDE0008.severity = silent
+
+# IDE0007: Use 'var' instead of explicit type
+dotnet_diagnostic.IDE0007.severity = error
+
+# IDE0055 Fix formatting
+dotnet_diagnostic.IDE0055.severity = error
+
+# IDE005_gen: Remove unnecessary usings in generated code
+dotnet_diagnostic.IDE0005_gen.severity = error
+
+# IDE0065: Using directives must be placed outside of a namespace declaration
+dotnet_diagnostic.IDE0065.severity = error
+
+# IDE0059: Unnecessary assignment
+dotnet_diagnostic.IDE0059.severity = error
+
+# IDE0003: Name can be simplified
+dotnet_diagnostic.IDE0003.severity = error  
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = silent
+
+# IDE0046: 'if' statement can be simplified
+dotnet_diagnostic.IDE0046.severity = silent
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = silent

@@ -5,7 +5,7 @@ dotnet restore
 dotnet clean
 
 # Build and publish the WebAssembly app
-dotnet publish -c Release -o "output" ./EventHorizon.Platform.Docs
+dotnet publish -c Release -o "output" ./Website
 
 # Set the RenderOutputDirectory environment variable
 # and run the Prerender test to generate the output
