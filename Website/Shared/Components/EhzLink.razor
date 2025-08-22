@@ -1,0 +1,17 @@
+<MudLink Href="@(Settings.BasePath + Href)" @attributes="AdditionalAttributes">
+    @ChildContent
+</MudLink>
+
+@code {
+    [Parameter]
+    public required string Href { get; set; }
+
+    [Parameter]
+    public required RenderFragment ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttributes { get; set; } = new();
+
+    [Inject]
+    public required PageMetadataSettings Settings { get; set; }
+}
