@@ -31,6 +31,8 @@ This project supports Blazor Server, Wasm, and Static Site Wasm deployments.
   }
   ```
 
+- Update `Website/wwwroot/404.html` to include the correct base path for GitHub.
+  - Not necessary if your site is hosted at the root.
 - Update instances of `[[EventHorizon Privacy Policy Email]]` in the project with the email address for your site's privacy policy.
 - Update instances of `[[EventHorizon Docs URL]]` in the project with the URL of your site.
 - Update instances of `[[EventHorizon Docs Site]]` in the project with the Name of your site.
