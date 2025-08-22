@@ -14,6 +14,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+env:
+  EHZ_BASE_URL: ${{ vars.EHZ_BASE_URL }}
+
 jobs:
   publishDeploy:
     runs-on: ubuntu-latest
