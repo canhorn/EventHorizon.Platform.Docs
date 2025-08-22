@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
 @using Website
+@using Website.Metadata.Api
+@inject PageMetadataSettings Settings
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
@@ -8,7 +10,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <base href="/@(GlobalPageConfig.BaseUrl)" />
+    <base href="/@(Settings.BasePath)" />
     <component type="typeof(HeadOutlet)" render-mode="WebAssemblyPrerendered" />
     <link href="css/theme.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />

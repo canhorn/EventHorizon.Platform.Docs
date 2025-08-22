@@ -31,6 +31,7 @@ public partial class MarkdownFrom
 
 public static class EmbeddedResourceLoader
 {
+    // TODO: To pull in multiple resources we should pull the Assemblies from PageMetadataSettings
     private static readonly HashSet<string> LoadedResources =
     [
         .. Assembly.GetExecutingAssembly().GetManifestResourceNames(),

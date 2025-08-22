@@ -18,7 +18,7 @@ public class StandardPageMetadataRepository : PageMetadataRepository
 
     public StandardPageMetadataRepository(PageMetadataSettings settings)
     {
-        _basePath = GlobalPageConfig.BaseUrl.TrimEnd('/');
+        _basePath = settings.BasePath.TrimEnd('/');
         if (!string.IsNullOrEmpty(_basePath) && !_basePath.StartsWith('/'))
         {
             _basePath = "/" + _basePath;

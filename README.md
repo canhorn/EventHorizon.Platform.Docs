@@ -18,10 +18,19 @@ This project supports Blazor Server, Wasm, and Static Site Wasm deployments.
 
 ## Getting Started
 
-- `GlobalPageConfig.BaseUrl` controls the base URL for your site, including GitHub Pages or other hosting providers.
-  - Set an Environment Variable for `EHZ_BASE_URL` in your hosting or deployment environment.
-  - If your deploying to GitHub set this to the GitHub Pages Base URL.
+- Update `BasePath` in `Server/appsettings.json` and `Website/wwwroot/appsettings.json` to your Hosting URL's Base Path.
+  - Controls the base URL for your site, including GitHub Pages or other hosting providers.
+  - This is not necessary if your deploying to a host that has no subdirectory or is being removed during routing.
+  - If your deploying to GitHub set this to the GitHub Pages Path URL.
   - If your using a custom website that is deployed at the root you can ignore the configuration.
+  - For local development create a `Server/appsettings.Development.json` and `Website/wwwroot/appsettings.Development.json` file with the following content:
+
+  ```json
+  {
+    "BasePath": ""
+  }
+  ```
+
 - Update instances of `[[EventHorizon Privacy Policy Email]]` in the project with the email address for your site's privacy policy.
 - Update instances of `[[EventHorizon Docs URL]]` in the project with the URL of your site.
 - Update instances of `[[EventHorizon Docs Site]]` in the project with the Name of your site.

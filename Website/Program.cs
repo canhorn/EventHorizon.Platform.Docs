@@ -36,7 +36,12 @@ public class Program
 
         builder
             .Services.AddScoped<PageScopedState, InMemoryPageScopedState>()
-            .AddSingleton(new PageMetadataSettings([typeof(Program).Assembly]))
+            .AddSingleton(
+                new PageMetadataSettings(
+                    builder.Configuration.GetValue<string>("BasePath") ?? "",
+                    [typeof(Program).Assembly]
+                )
+            )
             .AddScoped<PageMetadataRepository, StandardPageMetadataRepository>();
 
         // I18n Services

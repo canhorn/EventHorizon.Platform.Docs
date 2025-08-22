@@ -28,7 +28,12 @@ public class Startup(IConfiguration configuration)
 
         services
             .AddScoped<PageScopedState, InMemoryPageScopedState>()
-            .AddSingleton(new PageMetadataSettings([typeof(Website.Program).Assembly]))
+            .AddSingleton(
+                new PageMetadataSettings(
+                    Configuration.GetValue<string>("BasePath") ?? "",
+                    [typeof(Website.Program).Assembly]
+                )
+            )
             .AddSingleton<PageMetadataRepository, StandardPageMetadataRepository>();
 
         // I18n Services
