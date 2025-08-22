@@ -7,6 +7,7 @@ This project is built on Blazor, with a focus on quick page creation.
 ## Features
 
 - Sidebar that will auto update based on razor annotated with the [PageAttribute] Attribute.
+- Markdown can be pulled from `md` embedded files
 - Static Site Generation for Blazor Wasm
 - Localization Built-In
 - Utility Components Available for Markdown and general debugging display.
@@ -17,9 +18,10 @@ This project supports Blazor Server, Wasm, and Static Site Wasm deployments.
 
 ## Getting Started
 
-- Update `GlobalPageConfig.BaseUrl` with your site's base URL.
-  - If your deploying to GitHub update this to the GitHub Pages Base URL.
-  - If your using a custom website that is deployed at the root you can remove the reference to the base URL or set to an empty string.
+- `GlobalPageConfig.BaseUrl` controls the base URL for your site, including GitHub Pages or other hosting providers.
+  - Set an Environment Variable for `EHZ_BASE_URL` in your hosting or deployment environment.
+  - If your deploying to GitHub set this to the GitHub Pages Base URL.
+  - If your using a custom website that is deployed at the root you can ignore the configuration.
 - Update instances of `[[EventHorizon Privacy Policy Email]]` in the project with the email address for your site's privacy policy.
 - Update instances of `[[EventHorizon Docs URL]]` in the project with the URL of your site.
 - Update instances of `[[EventHorizon Docs Site]]` in the project with the Name of your site.
@@ -40,17 +42,46 @@ Including [PageMetadata] attribute, set meta information about the page.
 | -------- | ----------------------------------------------- |
 | Title    | Used for display purposes outside of this page. |
 
-## Example Razor File
+## Example Razor Files
 
-### CreateAMap.razor
+### Razor Page
+
+Create a Razor page with the [Page] attribute and inherit from PageMetadataBase to set metadata.
+
+Map.razor
 
 ```html
-@page "/tutorials/create-a-map" @attribute [Page] @attribute [PageMetadata(Title
-= "Create a Map")] @inherits PageMetadataBase
+@page "/examples/a-map" @attribute [Page] @attribute [PageMetadata(Title
+= "Map")] @inherits PageMetadataBase
 
-<h1>@Localizer["Create a Map"]</h1>
+<h1>@Localizer["Map"]</h1>
 
 <p>@Localizer["Tutorial on how to create a map..."]</p>
+```
+
+### Markdown Page
+
+Markdown registered in the `Website/Pages` folder will be automatically be registered as an embedded resources. That can then be referenced by name using the `MarkdownFrom` component.
+
+MarkdownPage.razor
+
+```html
+@page "/examples/markdown"
+@attribute [Page]
+@attribute [PageMetadata(Title = "Markdown Example")]
+@inherits PageMetadataBase
+
+<MarkdownFrom ResourceName="MarkdownPage.razor.md" />
+
+```
+
+MarkdownPage.razor.md
+
+```md
+# Markdown Example
+
+This is an example of a markdown page.
+
 ```
 
 ## Application Details
@@ -61,7 +92,7 @@ The folders, pulled from the route, will require Resource Keys to be added to th
 
 ## Deployment Scenarios
 
-You can clone this project and run the solution, checkout the GettingStarted.razor and CreateAMap.razor for examples of how the pages are structured. Any pages, correctly attributed, in the Pages directory should be supported.
+You can clone this project and run the solution, checkout the `Index.Razor`, `Map.razor` and `MarkdownPage.razor` for examples of how pages are structured. Any pages, including pages not explicitly mentioned, in the Pages directory should be supported.
 
 ## Creating a Blazor Server Hosted Docker Image
 
