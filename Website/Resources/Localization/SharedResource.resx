@@ -123,4 +123,7 @@
   <data name="TermsOfService" xml:space="preserve">
     <value>Terms of Service</value>
   </data>
+  <data name="examples" xml:space="preserve">
+    <value>Examples</value>
+  </data>
 </root>
