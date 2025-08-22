@@ -6,18 +6,15 @@
     <MudNavGroup Title="@Node.Text" Expanded="@Node.IsExpanded">
         @foreach (var child in Node.Children)
         {
-            <NavTreeViewNode Node="@child"
-                            OnChanged="OnChanged"
-                            OnNodeClicked="OnNodeClicked"/>
+            <NavTreeViewNode Node="@child" OnChanged="OnChanged" OnNodeClicked="OnNodeClicked" />
         }
     </MudNavGroup>
 }
-else 
+else
 {
-    <MudNavLink Href="@GetNodeHref()"
-                Class="@GetNavLinkClass()"
-                Icon="@GetIconClass()"
-                data-selector="tree-node-text">
+    <MudNavLink Href="@GetNodeHref()" Class="@GetNavLinkClass()" Icon="@GetIconClass()" data-selector="tree-node-text">
         @Node.Text
     </MudNavLink>
 }
+SOmethign (@Node.Route)
+Something(@GlobalPageConfig.BaseUrl)

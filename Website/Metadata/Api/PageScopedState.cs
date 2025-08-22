@@ -4,8 +4,8 @@ using Website.Metadata.Model;
 
 public interface PageScopedState
 {
-    delegate void OnCurrentPageChangedDelegate(string route);
-    event OnCurrentPageChangedDelegate OnCurrentPageChanged;
-    PageMetadataModel? CurrentPage { get; }
-    void SetCurrentPage(PageMetadataModel page);
+    public delegate void OnCurrentPageChangedDelegate(string route);
+    public event OnCurrentPageChangedDelegate OnCurrentPageChanged;
+    public PageMetadataModel? CurrentPage { get; }
+    public void SetCurrentPage(PageMetadataModel page);
 }

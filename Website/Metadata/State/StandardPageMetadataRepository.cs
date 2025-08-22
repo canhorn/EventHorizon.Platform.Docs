@@ -13,10 +13,17 @@ using Website.Metadata.Model;
 public class StandardPageMetadataRepository : PageMetadataRepository
 {
     private readonly ConcurrentDictionary<string, PageMetadataModel> _map;
-    private readonly PageNavigation _nav;
+    private readonly PageNavigationModel _nav;
+    private readonly string _basePath;
 
     public StandardPageMetadataRepository(PageMetadataSettings settings)
     {
+        _basePath = GlobalPageConfig.BaseUrl.TrimEnd('/');
+        if (!string.IsNullOrEmpty(_basePath) && !_basePath.StartsWith('/'))
+        {
+            _basePath = "/" + _basePath;
+        }
+
         _map = GenerateListOfPageMetadata(settings);
         _nav = BuildPageNavigation(
             _map.Where(a => a.Value.InNavigation).ToDictionary(),
@@ -114,14 +121,12 @@ public class StandardPageMetadataRepository : PageMetadataRepository
             }
         }
 
-#pragma warning disable IDE0306 // Simplify collection initialization
         return new ConcurrentDictionary<string, PageMetadataModel>(
             pageList.OrderBy(a => a.Value.Order)
         );
-#pragma warning restore IDE0306 // Simplify collection initialization
     }
 
-    private static PageNavigationModel BuildPageNavigation(
+    private PageNavigationModel BuildPageNavigation(
         IDictionary<string, PageMetadataModel> pageList,
         IDictionary<string, float> folderOrders
     )
@@ -148,7 +153,7 @@ public class StandardPageMetadataRepository : PageMetadataRepository
         return root;
     }
 
-    private static void AddNavigationModelToNode(
+    private void AddNavigationModelToNode(
         IDictionary<string, PageMetadataModel> pageList,
         PageNavigationModel root,
         string path,
@@ -185,7 +190,7 @@ public class StandardPageMetadataRepository : PageMetadataRepository
                     Id = newParent.Id,
                     Order = newParent.Order,
                     Title = newParent.Title,
-                    Route = newParent.Route,
+                    Route = _basePath + newParent.Route,
                 };
                 // Set Parent to Folder
                 newParent.IsFolder = true;
@@ -223,7 +228,7 @@ public class StandardPageMetadataRepository : PageMetadataRepository
                 Id = node,
                 Order = pageMetadata.Order,
                 Title = pageMetadata.Title ?? node,
-                Route = path,
+                Route = _basePath + path,
             }
         );
         parent.ChildrenAsList =
