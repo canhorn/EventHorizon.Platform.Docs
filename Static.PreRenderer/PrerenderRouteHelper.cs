@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Components;
+using Website;
+using Website.Metadata.Attributes;
 
 public static class PrerenderRouteHelper
 {
@@ -26,13 +28,15 @@ public static class PrerenderRouteHelper
     {
         var attributes = component.GetCustomAttributes(inherit: true);
 
-        return attributes
-            .OfType<RouteAttribute>()
-            .Select(route => GetRouteFromComponent(route, component))
-            .ToArray();
+        return
+        [
+            .. attributes
+                .OfType<RouteAttribute>()
+                .SelectMany(route => GetRouteFromComponent(route, component)),
+        ];
     }
 
-    private static string GetRouteFromComponent(RouteAttribute routeAttribute, Type component)
+    private static List<string> GetRouteFromComponent(RouteAttribute routeAttribute, Type component)
     {
         if (routeAttribute is null)
         {
@@ -49,14 +53,34 @@ public static class PrerenderRouteHelper
             );
         }
 
-        // Doesn't support tokens yet
+        // If the route contains route values, check for PageMetadataAttribute and DatabaseKey
         if (route.Contains('{'))
         {
-            throw new Exception(
-                $"RouteAttribute for component '{component}' contains route values. Route values are invalid for prerendering"
-            );
+            // Get the Data Attribute From the Component
+            var attributes = component
+                .GetCustomAttributes(inherit: true)
+                .OfType<PageMetadataAttribute>();
+            if (!attributes.Any())
+            {
+                return [];
+            }
+
+            var pageMetadataAttribute = attributes.First();
+            if (string.IsNullOrEmpty(pageMetadataAttribute.DatabaseKey))
+            {
+                return [];
+            }
+
+            // Get the Routes from the Page Database
+            return
+            [
+                .. GlobalPageDatabases
+                    .GetPageRouteDatabaseByKey(pageMetadataAttribute.DatabaseKey)
+                    .Values.Where(data => !string.IsNullOrEmpty(data.Route))
+                    .Select(data => data.Route),
+            ];
         }
 
-        return route;
+        return [route];
     }
 }

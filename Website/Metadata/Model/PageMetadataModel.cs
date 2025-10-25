@@ -1,6 +1,6 @@
 namespace Website.Metadata.Model;
 
-public class PageMetadataModel
+public record PageMetadataModel
 {
     public float Order { get; set; }
     public string Route { get; set; } = string.Empty;

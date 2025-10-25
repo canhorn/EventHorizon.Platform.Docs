@@ -1,0 +1,16 @@
+@page "/custom-page/{*slug}"
+@attribute [Page]
+@attribute [PageMetadata(DatabaseKey = GlobalPageDatabases.CustomPageDatabaseKey)]
+@inherits DatabasePageMetadataBase<TemplateRouteData>
+
+<PageTitle>@Data.Title</PageTitle>
+
+<MudText Typo="Typo.h1">@Data.Title</MudText>
+
+<MudText Typo="Typo.body1">
+    @Data.Description
+</MudText>
+
+@code {
+    public override string DatabaseKey { get; } = GlobalPageDatabases.CustomPageDatabaseKey;
+}

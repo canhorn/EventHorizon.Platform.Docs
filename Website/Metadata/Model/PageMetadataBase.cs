@@ -37,4 +37,10 @@ public class PageMetadataBase : ComponentBase, PageMetadata
         PageMetadata = page;
         ScopedState.SetCurrentPage(page);
     }
+
+    protected void OverridePageMetadata(PageMetadataModel overrideMetadata)
+    {
+        PageMetadata = overrideMetadata;
+        ScopedState.SetCurrentPage(overrideMetadata);
+    }
 }

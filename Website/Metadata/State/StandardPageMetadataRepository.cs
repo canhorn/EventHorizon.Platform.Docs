@@ -102,7 +102,12 @@ public class StandardPageMetadataRepository : PageMetadataRepository
                         $"Page Metadata needs a RouteAttribute to function: {typeInfo.Name}"
                     );
                 }
-                var model = new PageMetadataModel { Title = typeInfo.Name };
+                var model = new PageMetadataModel
+                {
+                    Title = typeInfo.Name,
+                    Route = routeAttribute.Template,
+                };
+
                 // If has the PageMetadata Attribute pull data from that first
                 if (Attribute.IsDefined(typeInfo, typeof(PageMetadataAttribute)))
                 {
@@ -113,9 +118,22 @@ public class StandardPageMetadataRepository : PageMetadataRepository
                         : pageMetadataAttribute.Title;
                     model.Order = pageMetadataAttribute?.Order ?? 0;
                     model.InNavigation = pageMetadataAttribute?.InNavigation ?? true;
-                }
 
-                model.Route = routeAttribute.Template;
+                    if (!string.IsNullOrEmpty(pageMetadataAttribute?.DatabaseKey))
+                    {
+                        // Get Database Page Info
+                        var database = GlobalPageDatabases.GetPageRouteDatabaseByKey(
+                            pageMetadataAttribute.DatabaseKey
+                        );
+
+                        foreach (var (_, data) in database)
+                        {
+                            pageList.Add(data.Route, data.Metadata);
+                        }
+
+                        continue;
+                    }
+                }
 
                 pageList.Add(routeAttribute.Template, model);
             }
