@@ -12,18 +12,20 @@ public abstract class DatabasePageMetadataBase<TData> : PageMetadataBase
 
     protected TData Data { get; set; } = new();
 
+    private string CleanSlug => Slug.Trim('/');
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        if (string.IsNullOrEmpty(Slug))
+        if (string.IsNullOrEmpty(CleanSlug))
         {
             return;
         }
 
         if (
             GlobalPageDatabases.TryGetPageDatabaseByKey<TData>(DatabaseKey, out var database)
-            && database.TryGetValue(Slug, out var data)
+            && database.TryGetValue(CleanSlug, out var data)
         )
         {
             Data = data;
@@ -36,14 +38,14 @@ public abstract class DatabasePageMetadataBase<TData> : PageMetadataBase
     {
         base.OnParametersSet();
 
-        if (string.IsNullOrEmpty(Slug))
+        if (string.IsNullOrEmpty(CleanSlug))
         {
             return;
         }
 
         if (
             GlobalPageDatabases.TryGetPageDatabaseByKey<TData>(DatabaseKey, out var database)
-            && database.TryGetValue(Slug, out var data)
+            && database.TryGetValue(CleanSlug, out var data)
         )
         {
             Data = data;
