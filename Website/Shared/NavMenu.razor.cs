@@ -53,6 +53,7 @@ public partial class NavMenu : ComponentBase, IDisposable
         {
             Id = model.Id,
             Name = model.Title,
+            Route = model.Route,
             Text = Localizer[model.Title],
             Href = !model.IsFolder ? model.Route : string.Empty,
             IsDisabled = model.IsFolder && (model.Children == null || !model.Children.Any()),
